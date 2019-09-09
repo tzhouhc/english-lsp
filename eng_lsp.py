@@ -4,13 +4,16 @@
 import argparse
 
 from tools.diagnose import _diagnose
+from tools.complete import _complete
 from pygls.features import (
+    COMPLETION,
     TEXT_DOCUMENT_DID_OPEN,
     TEXT_DOCUMENT_DID_CHANGE,
     TEXT_DOCUMENT_DID_SAVE,
 )
 from pygls.server import LanguageServer
 from pygls.types import (
+    CompletionParams,
     DidOpenTextDocumentParams,
     DidChangeTextDocumentParams,
     DidSaveTextDocumentParams,
@@ -26,14 +29,19 @@ class EnglishLanguageServer(LanguageServer):
 english_server = EnglishLanguageServer()
 
 
+@english_server.feature(COMPLETION, trigger_characters=[" "])
+async def do_complete(ls, params: CompletionParams):
+    _complete(ls, params)
+
+
 @english_server.feature(TEXT_DOCUMENT_DID_CHANGE)
-def did_change(ls, params: DidChangeTextDocumentParams):
+async def did_change(ls, params: DidChangeTextDocumentParams):
     """Text document did change notification."""
     _diagnose(ls, params)
 
 
 @english_server.feature(TEXT_DOCUMENT_DID_SAVE)
-def did_save(ls, params: DidSaveTextDocumentParams):
+async def did_save(ls, params: DidSaveTextDocumentParams):
     """Text document did save notification."""
     english_server.show_message_log("Doing some diagnostics")
     _diagnose(ls, params)

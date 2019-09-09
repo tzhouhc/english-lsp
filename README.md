@@ -5,6 +5,8 @@ the... well the English language. At least, a proposal for one.
 
 ## Features
 
+**NOT ACTUALLY IMPLEMENTED YET**
+
 ### Text Completion
 It's not really code completion if it's just code, but still -- completion is
 nice to have. For that, my current idea is that we will suggest to you the "word
